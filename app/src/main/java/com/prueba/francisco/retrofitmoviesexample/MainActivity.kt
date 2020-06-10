@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.prueba.francisco.retrofitmoviesexample.adapter.ClickListener
@@ -16,18 +15,22 @@ import com.prueba.francisco.retrofitmoviesexample.model.Movie
 import com.prueba.francisco.retrofitmoviesexample.model.Result
 import com.prueba.francisco.retrofitmoviesexample.retrofit.RetrofitIntance
 import com.prueba.francisco.retrofitmoviesexample.service.MovieDataService
+import com.prueba.francisco.retrofitmoviesexample.util.LifeCycleDisposable
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observer
+import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
 
+    val disposable : LifeCycleDisposable = LifeCycleDisposable(this)
+
     private lateinit var movies: ArrayList<Result>
-    var recyclerView:RecyclerView? = null
+    var recyclerView: RecyclerView? = null
     var movieAdapter: MovieAdapter? = null
-    var layoutManager:RecyclerView.LayoutManager? = null
-    var swipeRefreshLayout : SwipeRefreshLayout? = null
+    var layoutManager: RecyclerView.LayoutManager? = null
+    var swipeRefreshLayout: SwipeRefreshLayout? = null
 
     @SuppressLint("ResourceAsColor")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         supportActionBar?.title = "TMDB Popular Movies Today"
-        getPopularMovies()
+        getPopularMoviesRX()
         recyclerView = rvMovies
         //layoutManager = LinearLayoutManager(this)
         layoutManager = GridLayoutManager(this, 2)
@@ -44,33 +47,46 @@ class MainActivity : AppCompatActivity() {
         swipeRefreshLayout = swipe
         swipeRefreshLayout?.setColorSchemeColors(R.color.colorPrimary)
         swipeRefreshLayout?.setOnRefreshListener {
-            getPopularMovies()
+            getPopularMoviesRX()
         }
     }
 
-    fun getPopularMovies() {
+    fun getPopularMoviesRX() {
         var movieDataService: MovieDataService = RetrofitIntance.getService()
-        var call = movieDataService.getPopularMovies(this.getString(R.string.api_key))
-        call.enqueue(object : Callback<Movie> {
-            override fun onFailure(call: Call<Movie>, t: Throwable) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
-
-            override fun onResponse(call: Call<Movie>, response: Response<Movie>) {
-                Log.d("Retrofit", response.message())
-                var movieDBResponse = response.body()
-                if (movieDBResponse?.results != null) {
-                    movies = movieDBResponse.results as ArrayList<Result>
-                    showRecyclerView()
+        var moviesObservable = movieDataService.getPopularMoviesRX(this.getString(R.string.api_key))
+        moviesObservable
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : Observer<Movie> {
+                override fun onComplete() {
+                    swipeRefreshLayout?.isRefreshing
                 }
-            }
-        })
+
+                override fun onNext(movieDBResponse: Movie?) {
+                    if (movieDBResponse?.results != null) {
+                        movies = movieDBResponse.results as ArrayList<Result>
+                        showRecyclerView()
+                    }
+                }
+
+                override fun onError(e: Throwable?) {
+                    Toast.makeText(applicationContext, "there is an error in the api request", Toast.LENGTH_SHORT).show()
+                }
+
+                override fun onSubscribe(disposableMovie: Disposable?) {
+                    if(disposableMovie != null){
+                        disposable.add(disposableMovie)
+                    }
+                }
+            })
+
     }
 
-    fun showRecyclerView(){
-        movieAdapter = MovieAdapter(this,movies,object : ClickListener{
+    fun showRecyclerView() {
+        movieAdapter = MovieAdapter(this, movies, object : ClickListener {
             override fun onClick(view: View, position: Int) {
-                Toast.makeText(applicationContext, movies[position].title, Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, movies[position].title, Toast.LENGTH_SHORT)
+                    .show()
             }
         })
         recyclerView?.itemAnimator = DefaultItemAnimator()

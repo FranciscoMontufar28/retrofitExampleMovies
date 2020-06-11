@@ -1,7 +1,7 @@
 package com.prueba.francisco.retrofitmoviesexample.adapter
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +10,7 @@ import com.prueba.francisco.retrofitmoviesexample.model.Result
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.movie_list_item_template.view.*
 
-class MovieAdapter(var context: Context, movieArrayList: ArrayList<Result>, var clickListener: ClickListener) : RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
+class MovieAdapter(movieArrayList: ArrayList<Result>, var clickListener: ClickListener) : androidx.recyclerview.widget.RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
 
     private var movies: ArrayList<Result>? = null
 
@@ -35,7 +35,8 @@ class MovieAdapter(var context: Context, movieArrayList: ArrayList<Result>, var 
         Picasso.get().load(imagePatch).placeholder(R.drawable.loading).into(holder.movieImage)
     }
 
-    class ViewHolder(itemView:View, clickListener: ClickListener):RecyclerView.ViewHolder(itemView),View.OnClickListener{
+    class ViewHolder(itemView:View, clickListener: ClickListener):
+        androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView),View.OnClickListener{
         var movieTitle = itemView.tvTitle
         var movieRating = itemView.tvRating
         var movieImage = itemView.ivMovie

@@ -1,4 +1,4 @@
-package com.prueba.francisco.retrofitmoviesexample.adapter
+package com.prueba.francisco.retrofitmoviesexample.popularMovies.view
 
 import android.view.View
 

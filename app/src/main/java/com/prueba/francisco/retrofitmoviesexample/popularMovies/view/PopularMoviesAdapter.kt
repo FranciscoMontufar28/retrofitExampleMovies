@@ -1,46 +1,50 @@
-package com.prueba.francisco.retrofitmoviesexample.adapter
+package com.prueba.francisco.retrofitmoviesexample.popularMovies.view
 
-import android.content.Context
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import com.prueba.francisco.retrofitmoviesexample.R
-import com.prueba.francisco.retrofitmoviesexample.model.Result
+import com.prueba.francisco.retrofitmoviesexample.popularMovies.data.model.Result
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.movie_list_item_template.view.*
 
-class MovieAdapter(movieArrayList: ArrayList<Result>, var clickListener: ClickListener) : androidx.recyclerview.widget.RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
+class PopularMoviesAdapter( var clickListener: ClickListener) : androidx.recyclerview.widget.RecyclerView.Adapter<PopularMoviesAdapter.ViewHolder>() {
 
-    private var movies: ArrayList<Result>? = null
+    private var movieList: List<Result>? = null
 
-    init {
-        this.movies = movieArrayList
+    fun setData(movies: List<Result>){
+        this.movieList = movies
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): ViewHolder {
         var view = LayoutInflater.from(parent.context).inflate(R.layout.movie_list_item_template,parent,false)
-        return ViewHolder(view,clickListener)
+        return ViewHolder(
+            view,
+            clickListener
+        )
     }
 
     override fun getItemCount(): Int {
-        return movies?.count()?:0
+        return movieList?.count()?:0
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.movieTitle.text = movies?.get(position)?.original_title
-        holder.movieRating.text = movies?.get(position)?.vote_average.toString()
-        var imagePatch = "https://image.tmdb.org/t/p/w500"+movies?.
+        holder.movieTitle.text = movieList?.get(position)?.original_title
+        holder.movieRating.text = movieList?.get(position)?.vote_average.toString()
+        var imagePatch = "https://image.tmdb.org/t/p/w500"+movieList?.
             get(position)?.poster_path
         Picasso.get().load(imagePatch).placeholder(R.drawable.loading).into(holder.movieImage)
     }
 
     class ViewHolder(itemView:View, clickListener: ClickListener):
         androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView),View.OnClickListener{
-        var movieTitle = itemView.tvTitle
-        var movieRating = itemView.tvRating
-        var movieImage = itemView.ivMovie
-        var listener:ClickListener? = null
+        var movieTitle: TextView = itemView.tvTitle
+        var movieRating: TextView = itemView.tvRating
+        var movieImage: ImageView = itemView.ivMovie
+        private var listener: ClickListener? = null
 
         init {
             itemView.setOnClickListener(this)

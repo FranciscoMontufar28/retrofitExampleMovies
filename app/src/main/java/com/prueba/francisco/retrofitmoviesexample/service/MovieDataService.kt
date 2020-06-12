@@ -1,6 +1,6 @@
 package com.prueba.francisco.retrofitmoviesexample.service
 
-import com.prueba.francisco.retrofitmoviesexample.model.Movie
+import com.prueba.francisco.retrofitmoviesexample.popularMovies.data.model.Movie
 import io.reactivex.rxjava3.core.Single
 import retrofit2.http.GET
 import retrofit2.http.Query

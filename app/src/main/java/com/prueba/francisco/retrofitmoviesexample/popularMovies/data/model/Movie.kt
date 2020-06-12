@@ -1,4 +1,4 @@
-package com.prueba.francisco.retrofitmoviesexample.model
+package com.prueba.francisco.retrofitmoviesexample.popularMovies.data.model
 
 data class Movie(
     val page: Int,

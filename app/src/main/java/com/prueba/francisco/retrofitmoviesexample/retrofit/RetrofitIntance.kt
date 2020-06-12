@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitIntance {
 
     val BASE_URL = "https://api.themoviedb.org/3/"
-    var retrofit: Retrofit? = null
+    private var retrofit: Retrofit? = null
 
     fun getService(): MovieDataService{
         if (retrofit == null){

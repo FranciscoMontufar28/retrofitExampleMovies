@@ -3,18 +3,22 @@ package com.prueba.francisco.retrofitmoviesexample.popularMovies.view
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
-import androidx.appcompat.app.AppCompatActivity
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.prueba.francisco.retrofitmoviesexample.App.Companion.CHANNEL_ID
 import com.prueba.francisco.retrofitmoviesexample.R
+import com.prueba.francisco.retrofitmoviesexample.popularMovies.PopularMoviesContract
 import com.prueba.francisco.retrofitmoviesexample.popularMovies.data.model.Movie
 import com.prueba.francisco.retrofitmoviesexample.popularMovies.data.model.Result
-import com.prueba.francisco.retrofitmoviesexample.popularMovies.PopularMoviesContract
 import com.prueba.francisco.retrofitmoviesexample.popularMovies.presenter.PopularMoviesPresenter
 import com.prueba.francisco.retrofitmoviesexample.util.LifeCycleDisposable
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -33,6 +37,7 @@ class PopularMoviesFragment : Fragment(), PopularMoviesContract.View {
     var recyclerView: RecyclerView? = null
     var layoutManager: RecyclerView.LayoutManager? = null
     var swipeRefreshLayout: SwipeRefreshLayout? = null
+    var notificationManager: NotificationManagerCompat? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,22 +62,24 @@ class PopularMoviesFragment : Fragment(), PopularMoviesContract.View {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         (activity as AppCompatActivity?)!!.supportActionBar?.title = "Popular Movies"
+        notificationManager =
+            NotificationManagerCompat.from(requireContext())
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater?.inflate(R.menu.popular_movies_menu, menu)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.popular_movies_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.orientationMenuId -> {
                 if (layoutManager is GridLayoutManager) {
                     layoutManager = LinearLayoutManager(requireContext())
                     item.title = "Grid View"
                     recyclerView?.layoutManager = layoutManager
-                }else{
-                    layoutManager = GridLayoutManager(requireContext(),2)
+                } else {
+                    layoutManager = GridLayoutManager(requireContext(), 2)
                     item.title = "Vertical View"
                     recyclerView?.layoutManager = layoutManager
                 }
@@ -97,8 +104,21 @@ class PopularMoviesFragment : Fragment(), PopularMoviesContract.View {
             object :
                 ClickListener {
                 override fun onClick(view: View, position: Int) {
-                    Toast.makeText(requireContext(), movies[position].title, Toast.LENGTH_SHORT)
-                        .show()
+                    val movieData = movies[position]
+                    val titleMovie = movieData.title
+                    val descriptionMovie = movieData.overview
+                    val urlImg = movieData.poster_path
+                    val rating = movieData.vote_average.toString()
+                    Navigation.findNavController(view)
+                        .navigate(
+                            PopularMoviesFragmentDirections
+                                .actionPopularMoviesFragment2ToMovieDetailsFragment(
+                                    titleMovie,
+                                    descriptionMovie,
+                                    urlImg,
+                                    rating
+                                )
+                        )
                 }
             })
     }
@@ -146,5 +166,16 @@ class PopularMoviesFragment : Fragment(), PopularMoviesContract.View {
 
     override fun showMessage(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    fun showNotification(title: String, description: String) {
+        var notification = NotificationCompat.Builder(requireContext(), CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setContentTitle(title)
+            .setContentText(description)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+            .build()
+        notificationManager?.notify(1, notification)
     }
 }

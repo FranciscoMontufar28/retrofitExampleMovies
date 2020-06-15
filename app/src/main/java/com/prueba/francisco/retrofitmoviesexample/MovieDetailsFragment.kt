@@ -22,7 +22,6 @@ class MovieDetailsFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        (activity as AppCompatActivity?)!!.supportActionBar?.title = "Movie Details"
         var arg = arguments?.let { MovieDetailsFragmentArgs.fromBundle(it) }
         val title = view?.findViewById<TextView>(R.id.tvMovieTitleDetails)
         val description = view?.findViewById<TextView>(R.id.tvMovieDescriptionDetails)

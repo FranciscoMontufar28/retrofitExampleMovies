@@ -30,4 +30,9 @@
         <argument android:name="ratingMovie"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/upcomingFragment"
+        android:name="com.prueba.francisco.retrofitmoviesexample.upcomingMovies.view.upcomingFragment"
+        android:label="fragment_upcoming"
+        tools:layout="@layout/fragment_upcoming" />
 </navigation>

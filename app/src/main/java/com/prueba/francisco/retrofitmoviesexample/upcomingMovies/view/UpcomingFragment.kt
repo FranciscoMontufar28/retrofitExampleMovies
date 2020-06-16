@@ -7,6 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.prueba.francisco.retrofitmoviesexample.R
 import com.prueba.francisco.retrofitmoviesexample.upcomingMovies.UpcomingMoviesContract
 import com.prueba.francisco.retrofitmoviesexample.upcomingMovies.data.model.Results
@@ -17,11 +20,16 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.core.SingleObserver
 import io.reactivex.rxjava3.disposables.Disposable
+import kotlinx.android.synthetic.main.fragment_upcoming.*
 
 class UpcomingFragment : Fragment(), UpcomingMoviesContract.View {
 
     val lifeCycleDisposable = LifeCycleDisposable(this)
-    var upcomingMoviesPresenter: UpcomingMoviesContract.Presenter? = null
+    private var upcomingMoviesPresenter: UpcomingMoviesContract.Presenter? = null
+    var recyclerView: RecyclerView? = null
+    private val movieAdapter by lazy {
+        UpcomingMoviesAdapter()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +44,7 @@ class UpcomingFragment : Fragment(), UpcomingMoviesContract.View {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        setUpRecycler()
         upcomingMoviesPresenter = UpcomingMoviesPresenter(this)
         val actionBar = (activity as AppCompatActivity?)!!.supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(false)
@@ -72,7 +81,16 @@ class UpcomingFragment : Fragment(), UpcomingMoviesContract.View {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
+    private fun setUpRecycler(){
+        val layoutManager = LinearLayoutManager(requireContext())
+        recyclerView = rvUpcoming
+        recyclerView?.layoutManager = layoutManager
+        recyclerView?.setHasFixedSize(true)
+        recyclerView?.itemAnimator = DefaultItemAnimator()
+        recyclerView?.adapter = movieAdapter
+    }
+
     fun showRecycler(listMovies: List<Results>) {
-        listMovies
+        movieAdapter.setData(listMovies)
     }
 }

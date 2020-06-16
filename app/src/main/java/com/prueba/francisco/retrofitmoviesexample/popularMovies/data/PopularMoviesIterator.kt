@@ -16,7 +16,7 @@ class PopularMoviesIterator() {
     private fun getPopularMoviesRX(): Single<Movie> {
         var movieDataService: MovieDataService = RetrofitIntance.getService()
         var moviesObservable =
-            movieDataService.getPopularMoviesRX("e843cf7bc4e6d2a10ba5b19e7da99129")
+            movieDataService.getPopularMovies("e843cf7bc4e6d2a10ba5b19e7da99129")
         moviesObservable
             .subscribeOn(Schedulers.io())
         return moviesObservable

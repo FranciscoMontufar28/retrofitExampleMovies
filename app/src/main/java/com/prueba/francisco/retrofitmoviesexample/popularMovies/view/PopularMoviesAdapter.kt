@@ -5,12 +5,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.prueba.francisco.retrofitmoviesexample.R
 import com.prueba.francisco.retrofitmoviesexample.popularMovies.data.model.Result
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.movie_list_item_template.view.*
 
-class PopularMoviesAdapter( var clickListener: ClickListener) : androidx.recyclerview.widget.RecyclerView.Adapter<PopularMoviesAdapter.ViewHolder>() {
+class PopularMoviesAdapter( var clickListener: ClickListener) : RecyclerView.Adapter<PopularMoviesAdapter.ViewHolder>() {
 
     private var movieList: List<Result>? = null
 
@@ -39,8 +40,7 @@ class PopularMoviesAdapter( var clickListener: ClickListener) : androidx.recycle
         Picasso.get().load(imagePatch).placeholder(R.drawable.loading).into(holder.movieImage)
     }
 
-    class ViewHolder(itemView:View, clickListener: ClickListener):
-        androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView),View.OnClickListener{
+    class ViewHolder(itemView:View, clickListener: ClickListener):RecyclerView.ViewHolder(itemView),View.OnClickListener{
         var movieTitle: TextView = itemView.tvTitle
         var movieRating: TextView = itemView.tvRating
         var movieImage: ImageView = itemView.ivMovie

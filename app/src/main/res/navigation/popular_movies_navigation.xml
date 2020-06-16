@@ -32,7 +32,7 @@
     </fragment>
     <fragment
         android:id="@+id/upcomingFragment"
-        android:name="com.prueba.francisco.retrofitmoviesexample.upcomingMovies.view.upcomingFragment"
+        android:name="com.prueba.francisco.retrofitmoviesexample.upcomingMovies.view.UpcomingFragment"
         android:label="fragment_upcoming"
         tools:layout="@layout/fragment_upcoming" />
 </navigation>

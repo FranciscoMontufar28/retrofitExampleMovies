@@ -5,6 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.prueba.francisco.retrofitmoviesexample.R
 import com.prueba.francisco.retrofitmoviesexample.popularMovies.data.model.Result
@@ -36,7 +38,7 @@ class PopularMoviesAdapter( var clickListener: ClickListener) : RecyclerView.Ada
         holder.movieTitle.text = movieList?.get(position)?.original_title
         holder.movieRating.text = movieList?.get(position)?.vote_average.toString()
         var imagePatch = "https://image.tmdb.org/t/p/w500"+movieList?.
-            get(position)?.poster_path
+        get(position)?.poster_path
         Picasso.get().load(imagePatch).placeholder(R.drawable.loading).into(holder.movieImage)
     }
 

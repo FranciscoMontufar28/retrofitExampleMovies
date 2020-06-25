@@ -63,6 +63,7 @@ class PopularMoviesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setUpActionBar()
         setUpRecyclerView()
         setUpSwipeView()
         showPopularMovies()
@@ -76,11 +77,6 @@ class PopularMoviesFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_popular_movies, container, false)
         popularMoviesViewModel = ViewModelProviders.of(this).get(PopularMoviesViewModel::class.java)
         return binding.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        (activity as AppCompatActivity?)!!.supportActionBar?.title = "Popular Movies"
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -134,5 +130,11 @@ class PopularMoviesFragment : Fragment() {
             movies = it
             movieAdapter.setData(it)
         })
+    }
+
+    private fun setUpActionBar() {
+        val actionBar = (activity as AppCompatActivity?)!!.supportActionBar
+        actionBar?.setDisplayHomeAsUpEnabled(false)
+        actionBar?.title = "Upcomming Movies"
     }
 }

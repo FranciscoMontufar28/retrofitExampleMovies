@@ -13,8 +13,7 @@ data class Results(
     val overview: String,
     val release_date: String
 )
-
 data class UpcomingModel(
-    val results: List<Results>,
+    val results: List<Results> = ArrayList(),
     val total_results: String
 )

@@ -7,16 +7,19 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.prueba.francisco.retrofitmoviesexample.R
+import com.prueba.francisco.retrofitmoviesexample.upcomingMovies.data.model.Movies
 import com.prueba.francisco.retrofitmoviesexample.upcomingMovies.data.model.Results
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.upcoming_movies_template.view.*
 
 class UpcomingMoviesAdapter(): RecyclerView.Adapter<UpcomingMoviesAdapter.UpcomingMoviesViewHolder>() {
 
-    private var movies: List<Results> = listOf()
+    private var movies: List<Movies> = listOf()
 
-    fun setData(listMovies: List<Results>){
-        this.movies = listMovies
+    fun setData(listMovies: List<Movies>?){
+        if (listMovies != null) {
+            this.movies = listMovies
+        }
         notifyDataSetChanged()
     }
 

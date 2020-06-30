@@ -14,9 +14,9 @@ import kotlinx.android.synthetic.main.upcoming_movies_template.view.*
 
 class UpcomingMoviesAdapter(): RecyclerView.Adapter<UpcomingMoviesAdapter.UpcomingMoviesViewHolder>() {
 
-    private var movies: List<Movies> = listOf()
+    private var movies: List<Results> = listOf()
 
-    fun setData(listMovies: List<Movies>?){
+    fun setData(listMovies: List<Results>?){
         if (listMovies != null) {
             this.movies = listMovies
         }

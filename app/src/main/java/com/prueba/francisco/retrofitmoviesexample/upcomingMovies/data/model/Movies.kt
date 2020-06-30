@@ -4,9 +4,9 @@ import androidx.room.Entity
 import androidx.room.OnConflictStrategy
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "upcoming_movies")
+//@Entity(tableName = "upcoming_movies")
 data class Movies(
-    @PrimaryKey
+    //@PrimaryKey
     val id: Int,
     val original_title: String,
     val release_date: String,

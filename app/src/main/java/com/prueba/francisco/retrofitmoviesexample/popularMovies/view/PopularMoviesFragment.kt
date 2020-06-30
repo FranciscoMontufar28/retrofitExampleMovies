@@ -3,7 +3,6 @@ package com.prueba.francisco.retrofitmoviesexample.popularMovies.view
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -117,6 +116,7 @@ class PopularMoviesFragment : Fragment() {
         swipeRefreshLayout = swipe
         swipeRefreshLayout?.setColorSchemeColors(R.color.colorPrimary)
         swipeRefreshLayout?.setOnRefreshListener {
+            showPopularMovies()
         }
     }
 
@@ -128,6 +128,7 @@ class PopularMoviesFragment : Fragment() {
         popularMoviesViewModel?.getPopularMovies()?.observe(viewLifecycleOwner, Observer {
             hideLoader()
             movies = it
+            swipeRefreshLayout?.isRefreshing = false
             movieAdapter.setData(it)
         })
     }

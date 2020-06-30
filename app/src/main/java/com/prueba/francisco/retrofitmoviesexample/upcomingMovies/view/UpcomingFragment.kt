@@ -13,8 +13,6 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.prueba.francisco.retrofitmoviesexample.R
-import com.prueba.francisco.retrofitmoviesexample.upcomingMovies.data.ApplicationDataBase
-import com.prueba.francisco.retrofitmoviesexample.upcomingMovies.data.model.Movies
 import com.prueba.francisco.retrofitmoviesexample.upcomingMovies.viewmodel.UpcomingMoviesViewModel
 import com.prueba.francisco.retrofitmoviesexample.util.LifeCycleDisposable
 import kotlinx.android.synthetic.main.fragment_upcoming.*

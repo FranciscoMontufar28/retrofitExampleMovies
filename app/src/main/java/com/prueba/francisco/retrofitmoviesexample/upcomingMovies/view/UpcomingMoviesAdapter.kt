@@ -7,7 +7,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.prueba.francisco.retrofitmoviesexample.R
-import com.prueba.francisco.retrofitmoviesexample.upcomingMovies.data.model.Movies
 import com.prueba.francisco.retrofitmoviesexample.upcomingMovies.data.model.Results
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.upcoming_movies_template.view.*

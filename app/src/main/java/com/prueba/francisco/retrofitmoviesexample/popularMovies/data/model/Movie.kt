@@ -1,5 +1,8 @@
 package com.prueba.francisco.retrofitmoviesexample.popularMovies.data.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
 data class Movie(
     val page: Int,
     val results: List<Result>,
@@ -7,11 +10,12 @@ data class Movie(
     val total_results: Int
 )
 
+@Entity(tableName = "popular_movies")
 data class Result(
+    @PrimaryKey
+    val id: Int,
     val adult: Boolean,
     val backdrop_path: String,
-    val genre_ids: List<Int>,
-    val id: Int,
     val original_language: String,
     val original_title: String,
     val overview: String,

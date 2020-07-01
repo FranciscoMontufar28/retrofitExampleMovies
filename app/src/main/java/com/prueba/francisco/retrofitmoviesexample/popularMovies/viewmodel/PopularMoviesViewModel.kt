@@ -3,37 +3,25 @@ package com.prueba.francisco.retrofitmoviesexample.popularMovies.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.prueba.francisco.retrofitmoviesexample.popularMovies.data.PopularMoviesObservable
-import com.prueba.francisco.retrofitmoviesexample.popularMovies.data.model.Movie
+import com.prueba.francisco.retrofitmoviesexample.popularMovies.data.PopularMoviesAPI
+import com.prueba.francisco.retrofitmoviesexample.popularMovies.data.PopularMoviesLocal
+import com.prueba.francisco.retrofitmoviesexample.popularMovies.data.PopularMoviesRepository
 import com.prueba.francisco.retrofitmoviesexample.popularMovies.data.model.Result
-import com.prueba.francisco.retrofitmoviesexample.popularMovies.view.PopularMoviesAdapter
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.SingleObserver
-import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 class PopularMoviesViewModel : ViewModel() {
 
-    private var adapter: PopularMoviesAdapter? = null
-    private val popularMoviesObservable = PopularMoviesObservable()
-
-
+    private val popularMoviesRepository = PopularMoviesRepository(PopularMoviesLocal,PopularMoviesAPI)
 
     fun getPopularMovies(): LiveData<List<Result>> {
         var movieResult : MutableLiveData<List<Result>> = MutableLiveData()
-        popularMoviesObservable.getPopularMovies()
+        popularMoviesRepository.getPopularMovies()
+            .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : SingleObserver<Movie>{
-                override fun onSuccess(movies: Movie?) {
-                    if (movies !=null){
-                        movieResult.value = movies.results
-                    }
-                }
-
-                override fun onSubscribe(d: Disposable?) {
-                }
-
-                override fun onError(e: Throwable?) {
-                }
+            .subscribe({
+                movieResult.value = it
+            },{
 
             })
         return movieResult

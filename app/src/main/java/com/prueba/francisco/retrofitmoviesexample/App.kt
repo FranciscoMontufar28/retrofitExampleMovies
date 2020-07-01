@@ -9,11 +9,13 @@ class App:Application() {
 
     companion object{
         const val CHANNEL_ID : String = "channelID"
+        lateinit var INSTANCE:App
     }
 
     override fun onCreate() {
         super.onCreate()
         createNotification()
+        INSTANCE = this
     }
 
     private fun createNotification(){

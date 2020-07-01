@@ -5,8 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.prueba.francisco.retrofitmoviesexample.R
 import com.prueba.francisco.retrofitmoviesexample.popularMovies.data.model.Result

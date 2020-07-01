@@ -13,8 +13,6 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.prueba.francisco.retrofitmoviesexample.R
-import com.prueba.francisco.retrofitmoviesexample.upcomingMovies.data.ApplicationDataBase
-import com.prueba.francisco.retrofitmoviesexample.upcomingMovies.data.model.Movies
 import com.prueba.francisco.retrofitmoviesexample.upcomingMovies.viewmodel.UpcomingMoviesViewModel
 import com.prueba.francisco.retrofitmoviesexample.util.LifeCycleDisposable
 import kotlinx.android.synthetic.main.fragment_upcoming.*
@@ -45,30 +43,9 @@ class UpcomingFragment : Fragment() {
     }
 
     private fun showMovies() {
-        upcomingMoviesViewModel?.getUpcomingMovies()?.observe(viewLifecycleOwner, Observer { it ->
-            var list: ArrayList<Movies> = arrayListOf()
-            it.forEach {
-                list.add(
-                    Movies(
-                        id = it.id,
-                        original_title = it.original_title,
-                        release_date = it.release_date,
-                        poster_path = it.poster_path
-                    )
-                )
-            }
-            ApplicationDataBase.getAppDataBase(requireContext())
-                ?.getDAO()
-                ?.saveUpcomingMovies(list)
-            showMoviesFromDB()
+        upcomingMoviesViewModel?.getUpcomingMovies()?.observe(viewLifecycleOwner, Observer {
+            movieAdapter.setData(it)
         })
-    }
-
-    private fun showMoviesFromDB() {
-        val results = ApplicationDataBase.getAppDataBase(requireContext())
-            ?.getDAO()
-            ?.getAllMovies()
-        movieAdapter.setData(results)
     }
 
     fun showMessage(message: String) {

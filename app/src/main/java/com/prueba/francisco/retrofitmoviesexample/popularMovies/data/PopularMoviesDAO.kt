@@ -12,6 +12,9 @@ interface PopularMoviesDAO {
     @Query("SELECT * FROM popular_movies")
     fun getAllMovies():List<Result>
 
+    @Query("SELECT * FROM popular_movies WHERE original_title LIKE '%' || :name || '%'" )
+    fun getMoviesByName(name:String):List<Result>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun saveMovies(movies:List<Result>)
 }

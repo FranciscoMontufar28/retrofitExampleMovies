@@ -1,13 +1,15 @@
 package com.prueba.francisco.retrofitmoviesexample.popularMovies.view
 
 import android.annotation.SuppressLint
+import android.app.SearchManager
+import android.content.Context
 import android.os.Bundle
 import android.view.*
+import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
@@ -20,15 +22,19 @@ import com.prueba.francisco.retrofitmoviesexample.popularMovies.data.model.Resul
 import com.prueba.francisco.retrofitmoviesexample.popularMovies.viewmodel.PopularMoviesViewModel
 import com.prueba.francisco.retrofitmoviesexample.util.LifeCycleDisposable
 import kotlinx.android.synthetic.main.fragment_popular_movies.*
+import org.koin.android.ext.android.get
 
 class PopularMoviesFragment : Fragment() {
 
     private lateinit var movies: List<Result>
 
     val movieDisposable: LifeCycleDisposable = LifeCycleDisposable(this)
+
     private var recyclerView: RecyclerView? = null
     private var layoutManager: RecyclerView.LayoutManager? = null
     private var swipeRefreshLayout: SwipeRefreshLayout? = null
+    private lateinit var searchManager: SearchManager
+    private lateinit var searchView: SearchView
     private val movieAdapter by lazy {
         PopularMoviesAdapter(
             object :
@@ -74,12 +80,24 @@ class PopularMoviesFragment : Fragment() {
     ): View? {
         val binding: FragmentPopularMoviesBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_popular_movies, container, false)
-        popularMoviesViewModel = ViewModelProviders.of(this).get(PopularMoviesViewModel::class.java)
+        popularMoviesViewModel = get()
         return binding.root
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.popular_movies_menu, menu)
+        searchManager = context?.getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        searchView = menu.findItem(R.id.popularMoviesSearch).actionView as SearchView
+        popularMoviesViewModel?.onSearchMovieResult(searchView)
+            ?.observe(viewLifecycleOwner, Observer {
+                movies = it
+                movieAdapter.setData(it)
+            })
+        popularMoviesViewModel?.onCloseSearchMovie(searchView)
+            ?.observe(viewLifecycleOwner, Observer {
+                movies = it
+                movieAdapter.setData(it)
+            })
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -101,6 +119,7 @@ class PopularMoviesFragment : Fragment() {
         }
         return super.onOptionsItemSelected(item)
     }
+
 
     private fun setUpRecyclerView() {
         recyclerView = rvMoviesFragment
@@ -136,6 +155,7 @@ class PopularMoviesFragment : Fragment() {
     private fun setUpActionBar() {
         val actionBar = (activity as AppCompatActivity?)!!.supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(false)
-        actionBar?.title = "Upcomming Movies"
+        actionBar?.title = "Popular Movies"
+
     }
 }

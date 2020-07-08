@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +16,7 @@ import com.prueba.francisco.retrofitmoviesexample.R
 import com.prueba.francisco.retrofitmoviesexample.upcomingMovies.viewmodel.UpcomingMoviesViewModel
 import com.prueba.francisco.retrofitmoviesexample.util.LifeCycleDisposable
 import kotlinx.android.synthetic.main.fragment_upcoming.*
+import org.koin.android.ext.android.get
 
 class UpcomingFragment : Fragment() {
 
@@ -30,8 +31,7 @@ class UpcomingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        upcomingMoviesViewModel =
-            ViewModelProviders.of(this).get(UpcomingMoviesViewModel::class.java)
+        upcomingMoviesViewModel = get()
         return inflater.inflate(R.layout.fragment_upcoming, container, false)
     }
 

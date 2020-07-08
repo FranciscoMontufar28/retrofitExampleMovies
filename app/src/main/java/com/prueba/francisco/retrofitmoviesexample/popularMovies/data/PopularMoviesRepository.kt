@@ -4,19 +4,24 @@ import com.prueba.francisco.retrofitmoviesexample.popularMovies.data.model.Resul
 import io.reactivex.rxjava3.core.Observable
 
 class PopularMoviesRepository(
-    val popularMoviesLocal: PopularMoviesLocal,
-    val popularMoviesAPI: PopularMoviesAPI
+    private val popularMoviesLocal: PopularMoviesLocal,
+    private val popularMoviesAPI: PopularMoviesAPI
 ) {
 
     fun getPopularMovies(): Observable<List<Result>> {
         return Observable.concat(
             popularMoviesLocal.fetchPopularMovies(),
             popularMoviesAPI.fetchPopularMovies()
-        ).doOnNext(::savePopularMovies)
+        ).distinct()
+            .doOnNext(::savePopularMovies)
             .onErrorResumeNext { Observable.empty() }
     }
 
     private fun savePopularMovies(movies: List<Result>?) {
         popularMoviesLocal.savePopularMovies(movies)
+    }
+
+    fun getPopularMoviesByName(name: String):List<Result>?{
+        return popularMoviesLocal.fetchPopularMovieByName(name)
     }
 }

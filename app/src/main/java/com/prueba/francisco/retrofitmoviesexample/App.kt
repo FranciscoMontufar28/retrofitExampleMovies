@@ -4,6 +4,9 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
+import com.prueba.francisco.retrofitmoviesexample.koin.viewModelKoinModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
 
 class App:Application() {
 
@@ -16,6 +19,10 @@ class App:Application() {
         super.onCreate()
         createNotification()
         INSTANCE = this
+        startKoin {
+            androidContext(this@App)
+            modules(listOf(viewModelKoinModule))
+        }
     }
 
     private fun createNotification(){

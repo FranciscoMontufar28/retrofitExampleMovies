@@ -27,4 +27,9 @@ class UpcomingMoviesViewModel: ViewModel() {
             })
         return upcomingMoviesList
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        upcomingMoviesList = MutableLiveData()
+    }
 }

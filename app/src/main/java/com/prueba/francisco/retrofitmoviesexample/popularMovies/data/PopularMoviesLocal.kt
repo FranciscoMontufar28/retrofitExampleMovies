@@ -8,10 +8,10 @@ import io.reactivex.rxjava3.core.Observable
 object PopularMoviesLocal : PopularMoviesDataSource {
 
     override fun fetchPopularMovies(): Observable<List<Result>> {
-        return Observable.fromCallable{
-           ApplicationDataBase.getAppDataBase(App.INSTANCE)
-               ?.getPopularDAO()
-               ?.getAllMovies()
+        return Observable.fromCallable {
+            ApplicationDataBase.getAppDataBase(App.INSTANCE)
+                ?.getPopularDAO()
+                ?.getAllMovies()
         }
     }
 
@@ -21,5 +21,11 @@ object PopularMoviesLocal : PopularMoviesDataSource {
                 ?.getPopularDAO()
                 ?.saveMovies(movies)
         }
+    }
+
+    fun fetchPopularMovieByName(name: String): List<Result>? {
+        return ApplicationDataBase.getAppDataBase(App.INSTANCE)
+            ?.getPopularDAO()
+            ?.getMoviesByName(name)
     }
 }

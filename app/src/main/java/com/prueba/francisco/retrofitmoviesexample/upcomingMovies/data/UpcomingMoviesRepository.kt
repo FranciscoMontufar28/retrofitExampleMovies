@@ -12,7 +12,7 @@ class UpcomingMoviesRepository(
         return Observable.concat(
             upcomingmoviesLocal.fetchUpcomingMovies()
             , upcomingMoviesAPI.fetchUpcomingMovies()
-        )
+        ).distinct()
             .doOnNext(::saveUpcomingMovies)
             .onErrorResumeNext { Observable.empty() }
     }

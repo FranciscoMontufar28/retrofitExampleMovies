@@ -45,6 +45,7 @@ class PopularMoviesFragment : Fragment() {
                     val descriptionMovie = movieData.overview
                     val urlImg = movieData.poster_path
                     val rating = movieData.vote_average.toString()
+                    val id = movieData.id
                     Navigation.findNavController(view)
                         .navigate(
                             PopularMoviesFragmentDirections
@@ -52,7 +53,8 @@ class PopularMoviesFragment : Fragment() {
                                     titleMovie,
                                     descriptionMovie,
                                     urlImg,
-                                    rating
+                                    rating,
+                                    id
                                 )
                         )
                 }
@@ -120,7 +122,6 @@ class PopularMoviesFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-
     private fun setUpRecyclerView() {
         recyclerView = rvMoviesFragment
         layoutManager = GridLayoutManager(requireContext(), 2)
@@ -139,7 +140,7 @@ class PopularMoviesFragment : Fragment() {
         }
     }
 
-    fun hideLoader() {
+    private fun hideLoader() {
         progressBar.visibility = View.GONE
     }
 

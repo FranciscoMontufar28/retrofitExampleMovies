@@ -3,6 +3,7 @@ package com.prueba.francisco.retrofitmoviesexample.upcomingMovies.data
 import com.prueba.francisco.retrofitmoviesexample.App
 import com.prueba.francisco.retrofitmoviesexample.ApplicationDataBase
 import com.prueba.francisco.retrofitmoviesexample.upcomingMovies.data.model.Results
+import com.prueba.francisco.retrofitmoviesexample.upcomingMovies.data.model.UpcomingModel
 import io.reactivex.rxjava3.core.Observable
 
 object UpcomingMoviesLocal : UpcomingMoviesDataSource {
@@ -17,6 +18,10 @@ object UpcomingMoviesLocal : UpcomingMoviesDataSource {
 
     fun saveUpcomingMovies(movies: List<Results>?) {
         if (movies != null) {
+            ApplicationDataBase.getAppDataBase(App.INSTANCE)
+                ?.getUpcomingDAO()
+                ?.cleanUpcomingMovies()
+
             ApplicationDataBase.getAppDataBase(App.INSTANCE)
                 ?.getUpcomingDAO()
                 ?.saveUpcomingMovies(movies)

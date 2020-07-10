@@ -1,10 +1,8 @@
 package com.prueba.francisco.retrofitmoviesexample.upcomingMovies.data
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.prueba.francisco.retrofitmoviesexample.upcomingMovies.data.model.Results
+import com.prueba.francisco.retrofitmoviesexample.upcomingMovies.data.model.UpcomingModel
 
 @Dao
 interface UpcomingMoviesDAO {
@@ -17,4 +15,7 @@ interface UpcomingMoviesDAO {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun saveUpcomingMovies(movies: List<Results>)
+
+    @Query("DELETE FROM upcoming_movies")
+    fun cleanUpcomingMovies()
 }
